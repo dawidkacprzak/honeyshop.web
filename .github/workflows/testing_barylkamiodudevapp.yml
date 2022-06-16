@@ -29,7 +29,7 @@ jobs:
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip --symlinks release.zip ./* -x node_modules/\* *.git*
+        run: zip --symlinks release.zip ./* -x *.git*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2

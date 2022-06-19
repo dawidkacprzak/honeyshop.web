@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ['picsum.photos']
   },
+  env: {
+    API_URL:"https://localhost:7037"
+  },
   trailingSlash: true
 }
 

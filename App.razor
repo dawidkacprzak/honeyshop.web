@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@inject honeyshop.web.Core.Service.UserStateService uss
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -11,3 +13,10 @@
     </NotFound>
 </Router>
 
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await uss.InitializeSession();
+    }
+}

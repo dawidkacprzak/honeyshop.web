@@ -1,0 +1,25 @@
+{
+  "name": "honeyshop.web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildcss": "postcss ./Styles/app.css -o ./wwwroot/css/app.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dawidkacprzak/honeyshop.frontclient.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dawidkacprzak/honeyshop.frontclient/issues"
+  },
+  "homepage": "https://github.com/dawidkacprzak/honeyshop.frontclient#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.1.6"
+  }
+}

@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <Exec Command="npm install" />
     <Exec Command="npm run buildcss" />
   </Target>
   <PropertyGroup>

@@ -1,22 +1,51 @@
 ﻿@inject honeyshop.web.Core.Service.UserStateService uss
+@if (sessionInitialized)
+{
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+}
+else
+{
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <PageTitle>Error</PageTitle>
+            <GeneralError ErrorMessage="Błąd sesji - spróbuj ponownie później." DetailedError="@detailedException"></GeneralError>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+}
 
-<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
 
 @code {
 
+    private bool sessionInitialized = false;
+    private string detailedException = "";
     protected override async Task OnInitializedAsync()
     {
-        await uss.InitializeSession();
+        try
+        {
+            await uss.InitializeSession();
+            sessionInitialized = true;
+        }
+        catch (Exception ex)
+        {
+            detailedException = ex.Message;
+        }
     }
+
 }

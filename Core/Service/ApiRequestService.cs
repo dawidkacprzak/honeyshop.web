@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using honeyshop.web.Model.Request;
 using honeyshop.web.model.Response;
@@ -16,8 +17,15 @@ public class ApiRequestService
     public async Task<ResponseBase<GetOrCreateSessionResponse>> GetOrCreateSessionAsync(
         GetOrCreateSessionRequest getOrCreateSessionRequest)
     {
-        return await PostAsync<ResponseBase<GetOrCreateSessionResponse>>("/GetOrCreateSession",
-            getOrCreateSessionRequest);
+        try
+        {
+            return await PostAsync<ResponseBase<GetOrCreateSessionResponse>>("/GetOrCreateSession",
+                getOrCreateSessionRequest);
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new Exception("Cannot process api request. " + ex.Message, ex);
+        }
     }
 
     private async Task<T> PostAsync<T>(string path, object? requestContent = null) where T : ResponseBase

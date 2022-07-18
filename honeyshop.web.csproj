@@ -1,8 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
-   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-    <Exec Command="npm install" />
-    <Exec Command="npm run buildcss" />
-  </Target>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>

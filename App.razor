@@ -1,7 +1,5 @@
 ﻿@inject honeyshop.web.Core.Service.UserStateService uss
-@if (sessionInitialized)
-{
-    <Router AppAssembly="@typeof(App).Assembly">
+<Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
             <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
@@ -13,22 +11,6 @@
             </LayoutView>
         </NotFound>
     </Router>
-}
-else
-{
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <PageTitle>Error</PageTitle>
-            <GeneralError ErrorMessage="Błąd sesji - spróbuj ponownie później." DetailedError="@detailedException"></GeneralError>
-        </Found>
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-}
 
 
 @code {

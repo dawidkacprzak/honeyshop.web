@@ -24,6 +24,11 @@
     <None Remove="model\" />
     <None Remove="model\request\" />
     <None Remove="Blazored.SessionStorage" />
+    <None Include="web.config">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

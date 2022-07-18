@@ -526,8 +526,8 @@ video {
 .h-\[60px\] {
   height: 60px;
 }
-.h-\[40px\] {
-  height: 40px;
+.\!h-\[40px\] {
+  height: 40px !important;
 }
 .w-screen {
   width: 100vw;
@@ -535,8 +535,8 @@ video {
 .\!w-\[200px\] {
   width: 200px !important;
 }
-.w-\[174px\] {
-  width: 174px;
+.\!w-\[174px\] {
+  width: 174px !important;
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));

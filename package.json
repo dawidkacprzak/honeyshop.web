@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "postcss ./Styles/app.css -o ./wwwroot/css/app.css",
-    "buildcss": "postcss ./Styles/app.css -o ./wwwroot/css/app.css"
+    "build": "postcss ./NET/Styles/app.css -o ./NET/wwwroot/css/app.css",
+    "buildcss": "postcss ./NET/Styles/app.css -o ./NET/wwwroot/css/app.css"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 ﻿@inject honeyshop.web.Core.Service.UserStateService uss
-@if (sessionInitialized)
+@if (!sessionErrored)
 {
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
@@ -33,18 +33,18 @@ else
 
 @code {
 
-    private bool sessionInitialized = false;
+    private bool sessionErrored = false;
     private string detailedException = "";
     protected override async Task OnInitializedAsync()
     {
         try
         {
             await uss.InitializeSession();
-            sessionInitialized = true;
         }
         catch (Exception ex)
         {
             detailedException = ex.Message;
+            sessionErrored = true;
         }
     }
 

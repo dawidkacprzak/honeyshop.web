@@ -11,7 +11,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7037/") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://pasieka-api.azurewebsites.net/") });
 builder.Services.AddScoped<ApiRequestService>();
 builder.Services.AddScoped<UserStateService>();
 

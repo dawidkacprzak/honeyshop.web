@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "postcss ./Styles/app.css -o ./wwwroot/css/app.css",
     "buildcss": "postcss ./Styles/app.css -o ./wwwroot/css/app.css"
   },
   "repository": {

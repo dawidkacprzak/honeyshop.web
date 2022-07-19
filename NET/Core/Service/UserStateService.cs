@@ -14,15 +14,18 @@ namespace honeyshop.web.Core.Service
     {
         private readonly ApiRequestService apiRequestService;
         private readonly ILocalStorageService localStorageService;
+        private Guid x; 
         public UserStateService(ApiRequestService apiRequestService, ILocalStorageService localStorageService)
         {
             this.apiRequestService = apiRequestService;
             this.localStorageService = localStorageService;
+            x = Guid.NewGuid();
         }
 
         public async Task InitializeSession(CancellationToken cancellationToken)
         {
-            string? sessionValue = await localStorageService.GetItemAsync<string>(SessionKeyDictionary.SESSION);
+            Console.WriteLine(x);
+            string? sessionValue = await localStorageService.GetItemAsync<string>(SessionKeyDictionary.SESSION, cancellationToken: cancellationToken);
             bool isValidGuid = Guid.TryParse(sessionValue, out var parsedGuid);
             if (isValidGuid)
             {
@@ -35,7 +38,7 @@ namespace honeyshop.web.Core.Service
                         ResponseBase<GetOrCreateSessionResponse> fixSessionResponse = await CreateNewSession(cancellationToken);
                         if (fixSessionResponse.Success)
                             await localStorageService.SetItemAsStringAsync(SessionKeyDictionary.SESSION,
-                                fixSessionResponse.Value.SessionId.ToString());
+                                fixSessionResponse.Value.SessionId.ToString(), cancellationToken: cancellationToken);
                         else
                         {
                             throw new Exception("Cannot initialize session."); //todo logger
@@ -48,7 +51,7 @@ namespace honeyshop.web.Core.Service
                 ResponseBase<GetOrCreateSessionResponse> newSession = await CreateNewSession(cancellationToken);
                 if (newSession.Success)
                     await localStorageService.SetItemAsStringAsync(SessionKeyDictionary.SESSION,
-                        newSession.Value.SessionId.ToString());
+                        newSession.Value.SessionId.ToString(), cancellationToken: cancellationToken);
                 else
                 {
                     throw new Exception("Cannot initialize new session."); //todo logger

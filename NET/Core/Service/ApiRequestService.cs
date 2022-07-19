@@ -3,39 +3,68 @@ using System.Net.Http.Json;
 using honeyshop.web.Model.Request;
 using honeyshop.web.model.Response;
 using Newtonsoft.Json;
+using RestSharp;
 
 namespace honeyshop.web.Core.Service;
 
 public class ApiRequestService
 {
-    private readonly HttpClient httpClient;
-    public ApiRequestService(HttpClient httpClient)
+    private readonly RestClient restClient;
+    public ApiRequestService(RestClient restClient)
     {
-        this.httpClient = httpClient;
+        this.restClient = restClient;
     }
 
     public async Task<ResponseBase<GetOrCreateSessionResponse>> GetOrCreateSessionAsync(
-        GetOrCreateSessionRequest getOrCreateSessionRequest, CancellationToken cancellationToken)
+        GetOrCreateSessionRequest getOrCreateSessionRequest, CancellationToken cancellationToken, bool retry = false)
     {
+
         try
         {
             return await PostAsync<ResponseBase<GetOrCreateSessionResponse>>(cancellationToken, "/GetOrCreateSession",
-                getOrCreateSessionRequest);
+                getOrCreateSessionRequest, retry);
         }
         catch (HttpRequestException ex)
         {
-            throw new Exception("Cannot process api request. " + ex.Message, ex);
+            throw new Exception("Cannot process api request. " + JsonConvert.SerializeObject(ex) + JsonConvert.SerializeObject(ex.InnerException), ex);
         }
     }
 
-    private async Task<T> PostAsync<T>(CancellationToken cancellationToken, string path, object? requestContent = null) where T : ResponseBase
+    private async Task<T> PostAsync<T>(CancellationToken cancellationToken, string path, object? requestContent = null, bool retry = false) where T : ResponseBase
     {
-        var jsonBody = requestContent is not null ? JsonContent.Create(requestContent) : null;
-        HttpResponseMessage responseMessage = await httpClient.PostAsync(path,jsonBody,cancellationToken);
-
-        if (responseMessage.IsSuccessStatusCode)
+        RestRequest request;
+        if (requestContent is null)
         {
-            return await SerializeApiResponseAsync<T>(responseMessage.Content, cancellationToken);
+            request = new RestRequest(path, Method.Post);
+        }
+        else
+        {
+            request = new RestRequest(path, Method.Post).AddBody(requestContent, contentType: "application/json");
+        }
+        RestResponse responseMessage;
+
+        int retryCounter = 0;
+        bool finished = false;
+        do
+        {
+            try
+            {
+                responseMessage = await restClient.PostAsync(request, cancellationToken);
+                finished = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); //todo logger
+            }finally
+            {
+                retryCounter++;
+            }
+        } while (!finished && retryCounter < 3);
+        responseMessage = await restClient.PostAsync(request, cancellationToken);
+
+        if (responseMessage.IsSuccessful)
+        {
+            return SerializeApiResponse<T>(responseMessage.Content ?? String.Empty);
         }
         else
         {
@@ -43,9 +72,9 @@ public class ApiRequestService
         }
     }
 
-    private async Task<T> SerializeApiResponseAsync<T>(HttpContent content,CancellationToken cancellationToken) where T : ResponseBase
+    private T SerializeApiResponse<T>(string content) where T : ResponseBase
     {
-        var response = await content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+        var response = JsonConvert.DeserializeObject<T>(content);
         if (response is null)
         {
             throw new Exception("Api response is success but content is empty");

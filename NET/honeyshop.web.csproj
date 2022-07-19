@@ -13,6 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.6" PrivateAssets="all" />
     <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="RestSharp" Version="108.0.1" />
+    <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="108.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +24,9 @@
     <None Remove="model\" />
     <None Remove="model\request\" />
     <None Remove="Blazored.SessionStorage" />
+    <None Remove="Microsoft.Extensions.Http" />
+    <None Remove="RestSharp" />
+    <None Remove="RestSharp.Serializers.NewtonsoftJson" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

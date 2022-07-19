@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using honeyshop.web;
 using honeyshop.web.Core.Service;
 using Blazored.SessionStorage;
+using RestSharp;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 //builder.RootComponents.Add<App>("#app");
@@ -11,7 +12,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://pasieka-api.azurewebsites.net/") });
+builder.Services.AddSingleton(new RestClient(new HttpClient() { BaseAddress = new Uri("https://pasieka-api.azurewebsites.net/")}));
 builder.Services.AddScoped<ApiRequestService>();
 builder.Services.AddScoped<UserStateService>();
 

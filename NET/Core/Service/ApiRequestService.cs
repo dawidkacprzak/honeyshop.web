@@ -24,7 +24,7 @@ public class ApiRequestService
         }
         catch (HttpRequestException ex)
         {
-            throw new Exception("Cannot process api request. " + ex.Message, ex);
+            throw new Exception("Cannot process api request. " + JsonConvert.SerializeObject(ex), ex);
         }
     }
 

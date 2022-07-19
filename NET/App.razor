@@ -46,6 +46,10 @@ else
             detailedException = ex.Message;
             sessionErrored = true;
         }
+        finally
+        {
+            StateHasChanged();
+        }
     }
 
 }

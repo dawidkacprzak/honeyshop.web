@@ -20,19 +20,19 @@ namespace honeyshop.web.Core.Service
             this.localStorageService = localStorageService;
         }
 
-        public async Task InitializeSession()
+        public async Task InitializeSession(CancellationToken cancellationToken)
         {
             string? sessionValue = await localStorageService.GetItemAsync<string>(SessionKeyDictionary.SESSION);
             bool isValidGuid = Guid.TryParse(sessionValue, out var parsedGuid);
             if (isValidGuid)
             {
                 ResponseBase<GetOrCreateSessionResponse> response = await apiRequestService.GetOrCreateSessionAsync(
-                    new GetOrCreateSessionRequest(parsedGuid));
+                    new GetOrCreateSessionRequest(parsedGuid),cancellationToken);
                 if (!response.Success)
                 {
                     if (response.ErrorCode == ErrorCode.SessionNotFound)
                     {
-                        ResponseBase<GetOrCreateSessionResponse> fixSessionResponse = await CreateNewSession();
+                        ResponseBase<GetOrCreateSessionResponse> fixSessionResponse = await CreateNewSession(cancellationToken);
                         if (fixSessionResponse.Success)
                             await localStorageService.SetItemAsStringAsync(SessionKeyDictionary.SESSION,
                                 fixSessionResponse.Value.SessionId.ToString());
@@ -45,7 +45,7 @@ namespace honeyshop.web.Core.Service
             }
             else
             {
-                ResponseBase<GetOrCreateSessionResponse> newSession = await CreateNewSession();
+                ResponseBase<GetOrCreateSessionResponse> newSession = await CreateNewSession(cancellationToken);
                 if (newSession.Success)
                     await localStorageService.SetItemAsStringAsync(SessionKeyDictionary.SESSION,
                         newSession.Value.SessionId.ToString());
@@ -56,10 +56,10 @@ namespace honeyshop.web.Core.Service
             }
         }
 
-        private async Task<ResponseBase<GetOrCreateSessionResponse>> CreateNewSession()
+        private async Task<ResponseBase<GetOrCreateSessionResponse>> CreateNewSession(CancellationToken cancellationToken)
         {
             return await apiRequestService.GetOrCreateSessionAsync(
-                new GetOrCreateSessionRequest());
+                new GetOrCreateSessionRequest(), cancellationToken);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿@inject honeyshop.web.Core.Service.UserStateService uss
+@implements IDisposable
+@using honeyshop.web.Shared;
 @if (!sessionErrored)
 {
     <Router AppAssembly="@typeof(App).Assembly">
@@ -32,14 +34,21 @@ else
 
 
 @code {
-
+    private CancellationTokenSource cts = new CancellationTokenSource();
     private bool sessionErrored = false;
     private string detailedException = "";
+
+    public void Dispose()
+    {
+        cts.Cancel();
+        cts.Dispose();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            await uss.InitializeSession();
+            await uss.InitializeSession(cts.Token);
         }
         catch (Exception ex)
         {

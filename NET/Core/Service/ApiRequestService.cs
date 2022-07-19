@@ -15,27 +15,27 @@ public class ApiRequestService
     }
 
     public async Task<ResponseBase<GetOrCreateSessionResponse>> GetOrCreateSessionAsync(
-        GetOrCreateSessionRequest getOrCreateSessionRequest)
+        GetOrCreateSessionRequest getOrCreateSessionRequest, CancellationToken cancellationToken)
     {
         try
         {
-            return await PostAsync<ResponseBase<GetOrCreateSessionResponse>>("/GetOrCreateSession",
+            return await PostAsync<ResponseBase<GetOrCreateSessionResponse>>(cancellationToken, "/GetOrCreateSession",
                 getOrCreateSessionRequest);
         }
         catch (HttpRequestException ex)
         {
-            throw new Exception("Cannot process api request. " + JsonConvert.SerializeObject(ex), ex);
+            throw new Exception("Cannot process api request. " + ex.Message, ex);
         }
     }
 
-    private async Task<T> PostAsync<T>(string path, object? requestContent = null) where T : ResponseBase
+    private async Task<T> PostAsync<T>(CancellationToken cancellationToken, string path, object? requestContent = null) where T : ResponseBase
     {
         var jsonBody = requestContent is not null ? JsonContent.Create(requestContent) : null;
-        HttpResponseMessage responseMessage = await httpClient.PostAsync(path,jsonBody);
+        HttpResponseMessage responseMessage = await httpClient.PostAsync(path,jsonBody,cancellationToken);
 
         if (responseMessage.IsSuccessStatusCode)
         {
-            return await SerializeApiResponseAsync<T>(responseMessage.Content);
+            return await SerializeApiResponseAsync<T>(responseMessage.Content, cancellationToken);
         }
         else
         {
@@ -43,9 +43,9 @@ public class ApiRequestService
         }
     }
 
-    private async Task<T> SerializeApiResponseAsync<T>(HttpContent content) where T : ResponseBase
+    private async Task<T> SerializeApiResponseAsync<T>(HttpContent content,CancellationToken cancellationToken) where T : ResponseBase
     {
-        var response = await content.ReadFromJsonAsync<T>();
+        var response = await content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
         if (response is null)
         {
             throw new Exception("Api response is success but content is empty");

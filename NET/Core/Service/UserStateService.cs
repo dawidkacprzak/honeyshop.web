@@ -14,21 +14,20 @@ namespace honeyshop.web.Core.Service
     {
         private readonly ApiRequestService apiRequestService;
         private readonly ILocalStorageService localStorageService;
-        private Guid x; 
         public UserStateService(ApiRequestService apiRequestService, ILocalStorageService localStorageService)
         {
             this.apiRequestService = apiRequestService;
             this.localStorageService = localStorageService;
-            x = Guid.NewGuid();
         }
 
         public async Task InitializeSession(CancellationToken cancellationToken)
         {
-            Console.WriteLine(x);
             string? sessionValue = await localStorageService.GetItemAsync<string>(SessionKeyDictionary.SESSION, cancellationToken: cancellationToken);
+            Console.WriteLine("Current seesion value: " + sessionValue);
             bool isValidGuid = Guid.TryParse(sessionValue, out var parsedGuid);
             if (isValidGuid)
             {
+                Console.WriteLine("GUI VALID");
                 ResponseBase<GetOrCreateSessionResponse> response = await apiRequestService.GetOrCreateSessionAsync(
                     new GetOrCreateSessionRequest(parsedGuid),cancellationToken);
                 if (!response.Success)

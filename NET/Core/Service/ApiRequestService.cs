@@ -33,6 +33,7 @@ public class ApiRequestService
     private async Task<T> PostAsync<T>(CancellationToken cancellationToken, string path, object? requestContent = null, bool retry = false) where T : ResponseBase
     {
         RestRequest request;
+        Console.WriteLine("Post: request content"+ JsonConvert.SerializeObject(requestContent));
         if (requestContent is null)
         {
             request = new RestRequest(path, Method.Post);
@@ -41,7 +42,8 @@ public class ApiRequestService
         {
             request = new RestRequest(path, Method.Post).AddBody(requestContent, contentType: "application/json");
         }
-        RestResponse responseMessage;
+        Console.WriteLine(JsonConvert.SerializeObject(request));
+        RestResponse responseMessage = new RestResponse();
 
         int retryCounter = 0;
         bool finished = false;
@@ -49,6 +51,7 @@ public class ApiRequestService
         {
             try
             {
+                Console.WriteLine("REQ");
                 responseMessage = await restClient.PostAsync(request, cancellationToken);
                 finished = true;
             }
@@ -59,8 +62,7 @@ public class ApiRequestService
             {
                 retryCounter++;
             }
-        } while (!finished && retryCounter < 3);
-        responseMessage = await restClient.PostAsync(request, cancellationToken);
+        } while (!finished && retryCounter < 10);
 
         if (responseMessage.IsSuccessful)
         {
@@ -68,7 +70,7 @@ public class ApiRequestService
         }
         else
         {
-            throw new Exception("Cannot handle api request. Try again later."); //todo logger
+            throw new Exception("Cannot handle api request. Try again later."  + JsonConvert.SerializeObject(responseMessage)+ responseMessage.ErrorMessage); //todo logger
         }
     }
 

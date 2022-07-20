@@ -1,8 +1,17 @@
 ﻿@page "/"
+<div class="w-full">
+    <img class="w-full h-auto" src="images/slider.png"/>
+    <div class="mt-[10px] mb-[10px]">
+        <p class="text-main text-sm mb-[10px]">Polecane</p>
+        <div class="flex flex-row">
+    <ProductCard/>
+    <div class="w-[10px]"></div>
+        <ProductCard/>
+        </div>
 
-<PageTitle>Index</PageTitle>
-<div class="bg-main"></div>
-<button @onclick="@logsmth">fgfgf</button>
+    </div>
+</div>
+
 
 
 @code {

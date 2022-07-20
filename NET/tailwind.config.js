@@ -6,6 +6,9 @@ module.exports = {
     colors:{
       main: "#CA964D"
     },
+    fontFamily: {
+      body: ['Jost']
+    },
     extend: {},
   },
   plugins: [],

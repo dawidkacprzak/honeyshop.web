@@ -215,7 +215,7 @@ else
 
 @code{
     private readonly CancellationTokenSource TokenSource =
-        new CancellationTokenSource();
+    new CancellationTokenSource();
     private bool sessionErrored = false;
     private bool initialized = false;
     private string detailedException = "";
@@ -227,28 +227,40 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        await InitializeSession();
+    }
+
+    private async Task InitializeSession()
+    {
+        int retryCount = 0;
+        bool finishedWithError = true;
+        do
         {
-            if (TokenSource.Token.IsCancellationRequested)
+            try
             {
-                return;
+                if (TokenSource.Token.IsCancellationRequested)
+                {
+                    return;
+                }
+                await uss.InitializeSession(TokenSource.Token).ConfigureAwait(false);
+                finishedWithError = false;
+                break;
             }
-            await uss.InitializeSession(TokenSource.Token).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            detailedException = JsonConvert.SerializeObject(ex);
+            catch (Exception ex)
+            {
+                detailedException = JsonConvert.SerializeObject(ex);
+                if (TokenSource.Token.IsCancellationRequested)
+                {
+                    return;
+                }
+            }
+            finally
+            {
+                retryCount++;
+            }
+        } while (finishedWithError && retryCount < 3);
+        initialized = true;
+        if (finishedWithError)
             sessionErrored = true;
-            if (TokenSource.Token.IsCancellationRequested)
-            {
-                return;
-            }
-        }
-        finally
-        {
-            Console.WriteLine("ON");
-            initialized = true;
-            StateHasChanged();
-        }
     }
 }

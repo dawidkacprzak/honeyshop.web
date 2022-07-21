@@ -1,22 +1,48 @@
 ﻿@page "/"
-<div class="w-full">
-    <img class="w-full h-auto" src="images/slider.png"/>
-    <div class="mt-[10px] mb-[10px]">
-        <p class="text-main text-sm mb-[10px]">Polecane</p>
-        <div class="flex flex-row">
-    <ProductCard/>
-    <div class="w-[10px]"></div>
-        <ProductCard/>
-        </div>
+@using honeyshop.web.Shared;
+@using honeyshop.web.Model.DTO;
 
-    </div>
+<div class="w-full">
+    <img class="w-auto h-[115px] ml-auto mr-auto" src="images/slider.png" />
+    <TitledSection>
+        @foreach (var item in RecommendedProducts)
+        {
+            <ProductCard Model="@item" />
+        }
+    </TitledSection>
 </div>
 
 
 
 @code {
-    private void logsmth()
+    private IList<ProductModel> RecommendedProducts = new List<ProductModel>();
+
+    protected override void OnInitialized()
     {
-        Console.WriteLine(":))0");
+        RecommendedProducts = new List<ProductModel>()
+        {
+                new ProductModel()
+                {
+                    ProductId = 1,
+                    Price = "24,50zł",
+                    Title = "Miód wielokwiatowy - 45g",
+                    ImageUrl = "images/placeholderItem.png"
+                },
+                                new ProductModel()
+                {
+                    ProductId = 1,
+                    Price = "24,50zł",
+                    Title = "Miód wielokwiatowy - 450g",
+                    ImageUrl = "images/placeholderItem.png"
+                },
+                                                new ProductModel()
+                {
+                    ProductId = 1,
+                    Price = "24,50zł",
+                    Title = "Miód wielokwiatowy - 450g",
+                    ImageUrl = "images/placeholderItem.png"
+                }
+        };
+        base.OnInitialized();
     }
 }

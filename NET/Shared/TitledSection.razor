@@ -1,0 +1,12 @@
+﻿<div class="mt-[25px]">
+    <p class="text-main text-sm mb-[10px]">Polecane</p>
+    <div class="flex flex-row overflow-x-auto max-w-full pb-[10px]">
+        @ChildContent
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+} 

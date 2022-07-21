@@ -1,16 +1,18 @@
-﻿<div class="h-[190px] w-[130px] border-[2px] border-[#E9E9E9]">
+﻿@using honeyshop.web.Model.DTO;
+<div class="h-[190px] w-[130px] border-[2px] border-[#E9E9E9] mr-[10px]">
     <div class="h-[80px] w-full flex flex-col items-center">
         <div class="max-h-full max-w-full h-full w-full p-[10px]">
-            <img class="max-h-full ml-auto mr-auto" src="images/placeholderItem.png"/>
+            <img class="max-h-full ml-auto mr-auto" src="@Model.ImageUrl"/>
         </div>
     </div>
     <div class="p-[8px]">
         <div class="w-[110px] bg-main h-[1px] mb-[8px]"></div>
-        <p class="text-xs">Miód wielokwiatowy - 450g</p>
-        <p class="text-main text-xs !leading-6">24,50zł</p>
+        <p class="text-xs">@Model.Title</p>
+        <p class="text-main text-xs !leading-6">@Model.Price</p>
         <BasketButton Text="Do koszyka"/>
     </div>
 </div>
 @code {
-
+    [Parameter]
+    public ProductModel Model { get; set; } = new ProductModel();
 }

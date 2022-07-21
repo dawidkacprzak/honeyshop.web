@@ -27,6 +27,7 @@
     <None Remove="Microsoft.Extensions.Http" />
     <None Remove="RestSharp" />
     <None Remove="RestSharp.Serializers.NewtonsoftJson" />
+    <None Remove="Model\DTO\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
@@ -34,6 +35,7 @@
     <Folder Include="Model\" />
     <Folder Include="Model\Request\" />
     <Folder Include="wwwroot\images" />
+    <Folder Include="Model\DTO\" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
